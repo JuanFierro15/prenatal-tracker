@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import HomeScreen from './src/screens/HomeScreen';
 import CitasScreen from './src/screens/CitasScreen';
+import DiarioScreen from './src/screens/DiarioScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +33,11 @@ export default function App() {
           name="Citas"
           component={CitasScreen}
           options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📅</Text> }}
+        />
+        <Tab.Screen
+          name="Diario"
+          component={DiarioScreen}
+          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📖</Text> }}
         />
       </Tab.Navigator>
     </NavigationContainer>
