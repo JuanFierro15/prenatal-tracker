@@ -1,49 +1,10 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { DESARROLLO_POR_SEMANA } from '../constants/desarrolloData';
 
 const PREGNANCY_START = new Date(2026, 2, 29);
 const DUE_DATE_EARLY = new Date(2026, 11, 13);
-
-const FRUIT_BY_WEEK: Record<number, { fruit: string; emoji: string }> = {
-  4:  { fruit: 'semilla de amapola', emoji: '🌱' },
-  5:  { fruit: 'semilla de sésamo',  emoji: '🌾' },
-  6:  { fruit: 'lenteja',            emoji: '🫘' },
-  7:  { fruit: 'arándano',           emoji: '🫐' },
-  8:  { fruit: 'frambuesa',          emoji: '🍓' },
-  9:  { fruit: 'aceituna',           emoji: '🫒' },
-  10: { fruit: 'ciruela',            emoji: '🍑' },
-  11: { fruit: 'lima',               emoji: '🍋' },
-  12: { fruit: 'limón',              emoji: '🍋' },
-  13: { fruit: 'durazno',            emoji: '🍑' },
-  14: { fruit: 'limón grande',       emoji: '🍋' },
-  15: { fruit: 'manzana',            emoji: '🍎' },
-  16: { fruit: 'aguacate',           emoji: '🥑' },
-  17: { fruit: 'pera',               emoji: '🍐' },
-  18: { fruit: 'pimiento',           emoji: '🫑' },
-  19: { fruit: 'mango',              emoji: '🥭' },
-  20: { fruit: 'plátano',            emoji: '🍌' },
-  21: { fruit: 'zanahoria grande',   emoji: '🥕' },
-  22: { fruit: 'papaya',             emoji: '🍈' },
-  23: { fruit: 'mango grande',       emoji: '🥭' },
-  24: { fruit: 'mazorca de maíz',    emoji: '🌽' },
-  25: { fruit: 'nabo',               emoji: '🫚' },
-  26: { fruit: 'lechuga',            emoji: '🥬' },
-  27: { fruit: 'coliflor',           emoji: '🥦' },
-  28: { fruit: 'berenjena',          emoji: '🍆' },
-  29: { fruit: 'calabaza',           emoji: '🎃' },
-  30: { fruit: 'melón pequeño',      emoji: '🍈' },
-  31: { fruit: 'coco',               emoji: '🥥' },
-  32: { fruit: 'piña',               emoji: '🍍' },
-  33: { fruit: 'piña grande',        emoji: '🍍' },
-  34: { fruit: 'melón cantalupo',    emoji: '🍈' },
-  35: { fruit: 'calabaza mediana',   emoji: '🎃' },
-  36: { fruit: 'papaya grande',      emoji: '🍈' },
-  37: { fruit: 'acelga',             emoji: '🥬' },
-  38: { fruit: 'sandía pequeña',     emoji: '🍉' },
-  39: { fruit: 'sandía',             emoji: '🍉' },
-  40: { fruit: 'sandía grande',      emoji: '🍉' },
-};
 
 const FEATURES = [
   { icon: '📅', label: 'Citas médicas',  color: '#E8F4FD', tab: 'Citas' },
@@ -66,7 +27,7 @@ export default function HomeScreen() {
   const daysUntilDue = Math.ceil((DUE_DATE_EARLY.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
   const weeksLeft = 40 - currentWeek;
 
-  const fruitInfo = FRUIT_BY_WEEK[currentWeek] ?? { fruit: 'bebé creciendo', emoji: '🌱' };
+  const fruitInfo = DESARROLLO_POR_SEMANA[currentWeek] ?? { fruta: 'bebé creciendo', frutaEmoji: '🌱', articulo: 'un' };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -87,9 +48,9 @@ export default function HomeScreen() {
             </View>
           </View>
           <View style={styles.weekCardRight}>
-            <Text style={styles.fruitEmoji}>{fruitInfo.emoji}</Text>
+            <Text style={styles.fruitEmoji}>{fruitInfo.frutaEmoji}</Text>
             <Text style={styles.fruitLabel}>Tu bebé mide como</Text>
-            <Text style={styles.fruitName}>una {fruitInfo.fruit}</Text>
+            <Text style={styles.fruitName}>{fruitInfo.articulo} {fruitInfo.fruta}</Text>
           </View>
         </View>
 

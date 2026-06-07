@@ -78,7 +78,7 @@ export default function DesarrolloScreen() {
           <Text style={styles.bebeEmoji}>{data.frutaEmoji}</Text>
           <View style={styles.bebeInfo}>
             <Text style={styles.bebeTitulo}>Tu bebé mide como</Text>
-            <Text style={styles.bebeNombreFruta}>una {data.fruta}</Text>
+            <Text style={styles.bebeNombreFruta}>{data.articulo} {data.fruta}</Text>
             <View style={styles.medidas}>
               <View style={styles.medida}>
                 <Text style={styles.medidaValor}>{data.peso}</Text>
