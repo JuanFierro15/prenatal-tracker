@@ -47,8 +47,8 @@ const FRUIT_BY_WEEK: Record<number, { fruit: string; emoji: string }> = {
 
 const FEATURES = [
   { icon: '📅', label: 'Citas médicas',  color: '#E8F4FD', tab: 'Citas' },
-  { icon: '📖', label: 'Diario',         color: '#FEF3E2', tab: null },
-  { icon: '👶', label: 'Desarrollo',     color: '#F0FDF4', tab: null },
+  { icon: '📖', label: 'Diario',         color: '#FEF3E2', tab: 'Diario' },
+  { icon: '👶', label: 'Desarrollo',     color: '#F0FDF4', tab: 'Desarrollo' },
   { icon: '🦵', label: 'Patadas',        color: '#FDF2F8', tab: null },
   { icon: '📊', label: 'Síntomas',       color: '#FFF7ED', tab: null },
   { icon: '📷', label: 'Fotos',          color: '#F0F9FF', tab: null },
