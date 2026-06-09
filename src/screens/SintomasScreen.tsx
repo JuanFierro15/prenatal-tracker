@@ -181,9 +181,11 @@ export default function SintomasScreen() {
               })}
             </View>
 
-            {!verTodos && sintomasResto.length > 0 && (
-              <TouchableOpacity style={styles.verTodosBtn} onPress={() => setVerTodos(true)}>
-                <Text style={styles.verTodosText}>+ Ver {sintomasResto.length} síntomas más</Text>
+            {sintomasResto.length > 0 && (
+              <TouchableOpacity style={styles.verTodosBtn} onPress={() => setVerTodos(v => !v)}>
+                <Text style={styles.verTodosText}>
+                  {verTodos ? '− Ver menos síntomas' : `+ Ver ${sintomasResto.length} síntomas más`}
+                </Text>
               </TouchableOpacity>
             )}
 
