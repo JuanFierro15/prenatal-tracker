@@ -159,12 +159,12 @@ export default function EmergenciaScreen() {
           {/* ── Botón principal Juan ── */}
           <View style={styles.jaunCard}>
             <Text style={styles.juanLabel}>Llamar a</Text>
-            <Text style={styles.juanNombre}>Juan ❤️</Text>
+            <Text style={styles.juanNombre}>Esposo ❤️</Text>
             {!editandoJuan ? (
               <>
                 <TouchableOpacity
                   style={styles.btnLlamarJuan}
-                  onPress={() => llamar(juanTel, 'Juan')}
+                  onPress={() => llamar(juanTel, 'Esposo')}
                   activeOpacity={0.85}
                 >
                   <Text style={styles.btnLlamarIcon}>📞</Text>
