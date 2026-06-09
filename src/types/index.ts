@@ -29,6 +29,20 @@ export type SesionPatadas = {
   timestamps: number[]; // ms timestamp de cada patada
 };
 
+export type FotoSemana = {
+  semana: number;
+  uri: string;
+  fecha: string; // 'YYYY-MM-DD'
+};
+
+export type Momento = {
+  id: string;
+  uri: string;
+  titulo: string;
+  fecha: string; // 'YYYY-MM-DD'
+  nota: string;
+};
+
 export type VotoNombre = 'si' | 'no' | null;
 
 export type Nombre = {

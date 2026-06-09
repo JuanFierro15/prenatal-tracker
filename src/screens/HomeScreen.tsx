@@ -12,7 +12,7 @@ const FEATURES = [
   { icon: '👶', label: 'Desarrollo',     color: '#F0FDF4', tab: 'Desarrollo' },
   { icon: '🦵', label: 'Patadas',        color: '#FDF2F8', tab: 'Patadas' },
   { icon: '📊', label: 'Síntomas',       color: '#FFF7ED', tab: 'Síntomas' },
-  { icon: '📷', label: 'Fotos',          color: '#F0F9FF', tab: null },
+  { icon: '📷', label: 'Fotos',          color: '#F0F9FF', tab: 'Fotos' },
   { icon: '✅', label: 'Checklist',      color: '#F7F7FF', tab: 'Checklist' },
   { icon: '⏱️', label: 'Contracciones', color: '#FFF1F2', tab: 'Contracciones' },
   { icon: '💝', label: 'Nombres',        color: '#FDF4FF', tab: 'Nombres' },
