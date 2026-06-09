@@ -29,6 +29,12 @@ export type SesionPatadas = {
   timestamps: number[]; // ms timestamp de cada patada
 };
 
+export type TareaPersonal = {
+  id: string;
+  texto: string;
+  completado: boolean;
+};
+
 export type SintomaRegistrado = {
   id: string;
   intensidad: 'leve' | 'moderado' | 'fuerte';

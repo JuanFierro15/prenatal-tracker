@@ -10,6 +10,7 @@ import DiarioScreen from './src/screens/DiarioScreen';
 import DesarrolloScreen from './src/screens/DesarrolloScreen';
 import PatadosScreen from './src/screens/PatadosScreen';
 import SintomasScreen from './src/screens/SintomasScreen';
+import ChecklistScreen from './src/screens/ChecklistScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -56,6 +57,11 @@ export default function App() {
           name="Síntomas"
           component={SintomasScreen}
           options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📊</Text> }}
+        />
+        <Tab.Screen
+          name="Checklist"
+          component={ChecklistScreen}
+          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>✅</Text> }}
         />
       </Tab.Navigator>
     </NavigationContainer>
