@@ -12,6 +12,7 @@ import DesarrolloScreen from './src/screens/DesarrolloScreen';
 import PatadosScreen from './src/screens/PatadosScreen';
 import SintomasScreen from './src/screens/SintomasScreen';
 import ChecklistScreen from './src/screens/ChecklistScreen';
+import ContraccionesScreen from './src/screens/ContraccionesScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -68,7 +69,8 @@ export default function App() {
           <Stack.Screen name="MainTabs" component={MainTabs} />
           <Stack.Screen name="Patadas"  component={PatadosScreen}  options={STACK_HEADER} />
           <Stack.Screen name="Síntomas" component={SintomasScreen} options={STACK_HEADER} />
-          <Stack.Screen name="Checklist" component={ChecklistScreen} options={STACK_HEADER} />
+          <Stack.Screen name="Checklist"     component={ChecklistScreen}     options={STACK_HEADER} />
+          <Stack.Screen name="Contracciones" component={ContraccionesScreen} options={STACK_HEADER} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

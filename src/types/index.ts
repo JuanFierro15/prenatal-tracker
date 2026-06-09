@@ -29,6 +29,19 @@ export type SesionPatadas = {
   timestamps: number[]; // ms timestamp de cada patada
 };
 
+export type Contraccion = {
+  id: string;
+  inicio: number;     // ms timestamp
+  fin: number | null; // null = en curso
+};
+
+export type SesionContracciones = {
+  id: string;
+  fecha: string;      // 'YYYY-MM-DD'
+  inicio: number;     // ms timestamp inicio sesión
+  contracciones: Contraccion[];
+};
+
 export type TareaPersonal = {
   id: string;
   texto: string;

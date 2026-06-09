@@ -14,7 +14,7 @@ const FEATURES = [
   { icon: '📊', label: 'Síntomas',       color: '#FFF7ED', tab: 'Síntomas' },
   { icon: '📷', label: 'Fotos',          color: '#F0F9FF', tab: null },
   { icon: '✅', label: 'Checklist',      color: '#F7F7FF', tab: 'Checklist' },
-  { icon: '⏱️', label: 'Contracciones', color: '#FFF1F2', tab: null },
+  { icon: '⏱️', label: 'Contracciones', color: '#FFF1F2', tab: 'Contracciones' },
   { icon: '💝', label: 'Nombres',        color: '#FDF4FF', tab: null },
   { icon: '🚨', label: 'Emergencia',     color: '#FFF5F5', tab: null },
 ];
