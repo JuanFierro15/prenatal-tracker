@@ -29,6 +29,17 @@ export type SesionPatadas = {
   timestamps: number[]; // ms timestamp de cada patada
 };
 
+export type VotoNombre = 'si' | 'no' | null;
+
+export type Nombre = {
+  id: string;
+  nombre: string;
+  genero: 'niño' | 'niña' | 'ambos';
+  votaMama: VotoNombre;
+  votaPapa: VotoNombre;
+  nota: string;
+};
+
 export type Contraccion = {
   id: string;
   inicio: number;     // ms timestamp
