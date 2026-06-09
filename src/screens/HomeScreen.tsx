@@ -16,7 +16,7 @@ const FEATURES = [
   { icon: '✅', label: 'Checklist',      color: '#F7F7FF', tab: 'Checklist' },
   { icon: '⏱️', label: 'Contracciones', color: '#FFF1F2', tab: 'Contracciones' },
   { icon: '💝', label: 'Nombres',        color: '#FDF4FF', tab: 'Nombres' },
-  { icon: '🚨', label: 'Emergencia',     color: '#FFF5F5', tab: null },
+  { icon: '🚨', label: 'Emergencia',     color: '#FFF5F5', tab: 'Emergencia' },
 ];
 
 export default function HomeScreen() {

@@ -15,6 +15,7 @@ import ChecklistScreen from './src/screens/ChecklistScreen';
 import ContraccionesScreen from './src/screens/ContraccionesScreen';
 import NombresScreen from './src/screens/NombresScreen';
 import FotosScreen from './src/screens/FotosScreen';
+import EmergenciaScreen from './src/screens/EmergenciaScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -75,6 +76,7 @@ export default function App() {
           <Stack.Screen name="Contracciones" component={ContraccionesScreen} options={STACK_HEADER} />
           <Stack.Screen name="Nombres"       component={NombresScreen}       options={STACK_HEADER} />
           <Stack.Screen name="Fotos"         component={FotosScreen}         options={STACK_HEADER} />
+          <Stack.Screen name="Emergencia"   component={EmergenciaScreen}   options={STACK_HEADER} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

@@ -29,6 +29,22 @@ export type SesionPatadas = {
   timestamps: number[]; // ms timestamp de cada patada
 };
 
+export type ContactoEmergencia = {
+  id: string;
+  nombre: string;
+  relacion: string;
+  telefono: string;
+};
+
+export type DatosMedicos = {
+  tipoSangre: string;
+  medico: string;
+  clinica: string;
+  direccionClinica: string;
+  alergias: string;
+  notas: string;
+};
+
 export type FotoSemana = {
   semana: number;
   uri: string;
