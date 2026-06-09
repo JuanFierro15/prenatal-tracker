@@ -10,7 +10,7 @@ const FEATURES = [
   { icon: '📅', label: 'Citas médicas',  color: '#E8F4FD', tab: 'Citas' },
   { icon: '📖', label: 'Diario',         color: '#FEF3E2', tab: 'Diario' },
   { icon: '👶', label: 'Desarrollo',     color: '#F0FDF4', tab: 'Desarrollo' },
-  { icon: '🦵', label: 'Patadas',        color: '#FDF2F8', tab: null },
+  { icon: '🦵', label: 'Patadas',        color: '#FDF2F8', tab: 'Patadas' },
   { icon: '📊', label: 'Síntomas',       color: '#FFF7ED', tab: null },
   { icon: '📷', label: 'Fotos',          color: '#F0F9FF', tab: null },
   { icon: '✅', label: 'Checklist',      color: '#F7F7FF', tab: null },

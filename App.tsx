@@ -8,6 +8,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import CitasScreen from './src/screens/CitasScreen';
 import DiarioScreen from './src/screens/DiarioScreen';
 import DesarrolloScreen from './src/screens/DesarrolloScreen';
+import PatadosScreen from './src/screens/PatadosScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,6 +45,11 @@ export default function App() {
           name="Desarrollo"
           component={DesarrolloScreen}
           options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>👶</Text> }}
+        />
+        <Tab.Screen
+          name="Patadas"
+          component={PatadosScreen}
+          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🦵</Text> }}
         />
       </Tab.Navigator>
     </NavigationContainer>

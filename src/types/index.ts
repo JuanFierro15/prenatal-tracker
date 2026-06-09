@@ -8,6 +8,27 @@ export type Cita = {
   proximaCita: string; // 'YYYY-MM-DD' o ''
 };
 
+export type DiaPatadas = {
+  id: string;           // fecha como ID
+  fecha: string;        // 'YYYY-MM-DD'
+  semana: number;
+  patadas: number;      // total del día
+  meta: number;         // meta de esa semana
+  timestamps: number[]; // hora de cada patada
+};
+
+export type SesionPatadas = {
+  id: string;
+  fecha: string;        // 'YYYY-MM-DD'
+  semana: number;
+  inicio: number;       // ms timestamp
+  fin: number | null;   // ms timestamp, null = sesión en curso
+  patadas: number;
+  meta: number;
+  alerta: number;       // umbral por debajo del cual avisar al médico
+  timestamps: number[]; // ms timestamp de cada patada
+};
+
 export type EntradaDiario = {
   id: string;
   fecha: string;     // 'YYYY-MM-DD'
