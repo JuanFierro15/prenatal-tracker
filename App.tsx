@@ -1,5 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -13,58 +14,63 @@ import SintomasScreen from './src/screens/SintomasScreen';
 import ChecklistScreen from './src/screens/ChecklistScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function MainTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: '#C2185B',
+        tabBarInactiveTintColor: '#aaa',
+        tabBarStyle: { backgroundColor: '#fff', borderTopColor: '#f0f0f0', height: 60, paddingBottom: 8 },
+        tabBarLabelStyle: { fontSize: 12, fontWeight: '600' },
+      }}
+    >
+      <Tab.Screen
+        name="Inicio"
+        component={HomeScreen}
+        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🏠</Text> }}
+      />
+      <Tab.Screen
+        name="Citas"
+        component={CitasScreen}
+        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📅</Text> }}
+      />
+      <Tab.Screen
+        name="Diario"
+        component={DiarioScreen}
+        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📖</Text> }}
+      />
+      <Tab.Screen
+        name="Desarrollo"
+        component={DesarrolloScreen}
+        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>👶</Text> }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+const STACK_HEADER = {
+  headerShown: true,
+  title: '',
+  headerStyle: { backgroundColor: '#FFF5F7' },
+  headerTintColor: '#C2185B',
+  headerShadowVisible: false,
+};
 
 export default function App() {
   return (
     <SafeAreaProvider>
-    <NavigationContainer>
-      <StatusBar style="dark" />
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: false,
-          tabBarActiveTintColor: '#C2185B',
-          tabBarInactiveTintColor: '#aaa',
-          tabBarStyle: { backgroundColor: '#fff', borderTopColor: '#f0f0f0', height: 60, paddingBottom: 8 },
-          tabBarLabelStyle: { fontSize: 12, fontWeight: '600' },
-        }}
-      >
-        <Tab.Screen
-          name="Inicio"
-          component={HomeScreen}
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🏠</Text> }}
-        />
-        <Tab.Screen
-          name="Citas"
-          component={CitasScreen}
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📅</Text> }}
-        />
-        <Tab.Screen
-          name="Diario"
-          component={DiarioScreen}
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📖</Text> }}
-        />
-        <Tab.Screen
-          name="Desarrollo"
-          component={DesarrolloScreen}
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>👶</Text> }}
-        />
-        <Tab.Screen
-          name="Patadas"
-          component={PatadosScreen}
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🦵</Text> }}
-        />
-        <Tab.Screen
-          name="Síntomas"
-          component={SintomasScreen}
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📊</Text> }}
-        />
-        <Tab.Screen
-          name="Checklist"
-          component={ChecklistScreen}
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>✅</Text> }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <StatusBar style="dark" />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="MainTabs" component={MainTabs} />
+          <Stack.Screen name="Patadas"  component={PatadosScreen}  options={STACK_HEADER} />
+          <Stack.Screen name="Síntomas" component={SintomasScreen} options={STACK_HEADER} />
+          <Stack.Screen name="Checklist" component={ChecklistScreen} options={STACK_HEADER} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
