@@ -29,6 +29,19 @@ export type SesionPatadas = {
   timestamps: number[]; // ms timestamp de cada patada
 };
 
+export type SintomaRegistrado = {
+  id: string;
+  intensidad: 'leve' | 'moderado' | 'fuerte';
+};
+
+export type RegistroSintomas = {
+  id: string;
+  fecha: string;   // 'YYYY-MM-DD'
+  semana: number;
+  sintomas: SintomaRegistrado[];
+  nota: string;
+};
+
 export type EntradaDiario = {
   id: string;
   fecha: string;     // 'YYYY-MM-DD'

@@ -11,7 +11,7 @@ const FEATURES = [
   { icon: '📖', label: 'Diario',         color: '#FEF3E2', tab: 'Diario' },
   { icon: '👶', label: 'Desarrollo',     color: '#F0FDF4', tab: 'Desarrollo' },
   { icon: '🦵', label: 'Patadas',        color: '#FDF2F8', tab: 'Patadas' },
-  { icon: '📊', label: 'Síntomas',       color: '#FFF7ED', tab: null },
+  { icon: '📊', label: 'Síntomas',       color: '#FFF7ED', tab: 'Síntomas' },
   { icon: '📷', label: 'Fotos',          color: '#F0F9FF', tab: null },
   { icon: '✅', label: 'Checklist',      color: '#F7F7FF', tab: null },
   { icon: '⏱️', label: 'Contracciones', color: '#FFF1F2', tab: null },
