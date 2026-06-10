@@ -6,6 +6,7 @@ export type Cita = {
   especialidad: string;
   resultado: string;
   proximaCita: string; // 'YYYY-MM-DD' o ''
+  notifId?: string;    // ID de la notificación programada
 };
 
 export type DiaPatadas = {

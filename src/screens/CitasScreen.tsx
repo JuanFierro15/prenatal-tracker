@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Cita } from '../types';
 import CalendarioCitas from '../components/CalendarioCitas';
 import { ESPECIALIDAD_COLORS } from '../constants/especialidadColors';
+import { scheduleAppointmentReminder, cancelNotification } from '../utils/notifications';
 
 const STORAGE_KEY = '@citas';
 
@@ -124,12 +125,22 @@ export default function CitasScreen() {
       Alert.alert('Campos requeridos', 'Completa la fecha, médico y especialidad.');
       return;
     }
+
+    // Cancelar notificación anterior si se está editando
+    if (editando?.notifId) await cancelNotification(editando.notifId);
+
+    const citaBase: Cita = editando
+      ? { ...form, id: editando.id }
+      : { ...form, id: Date.now().toString() };
+
+    const notifId = await scheduleAppointmentReminder(citaBase);
+    const citaFinal: Cita = notifId ? { ...citaBase, notifId } : citaBase;
+
     let nuevas: Cita[];
     if (editando) {
-      nuevas = citas.map(c => c.id === editando.id ? { ...form, id: editando.id } : c);
+      nuevas = citas.map(c => c.id === editando.id ? citaFinal : c);
     } else {
-      const nueva: Cita = { ...form, id: Date.now().toString() };
-      nuevas = [...citas, nueva];
+      nuevas = [...citas, citaFinal];
     }
     nuevas.sort((a, b) => b.fecha.localeCompare(a.fecha));
     await guardarCitas(nuevas);
@@ -142,6 +153,8 @@ export default function CitasScreen() {
       {
         text: 'Eliminar', style: 'destructive',
         onPress: async () => {
+          const cita = citas.find(c => c.id === id);
+          if (cita?.notifId) await cancelNotification(cita.notifId);
           const nuevas = citas.filter(c => c.id !== id);
           await guardarCitas(nuevas);
         },

@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  Animated, Alert,
+  Animated, Alert, Switch,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SesionPatadas } from '../types';
+import {
+  getKickReminderSettings, scheduleKickReminder, cancelKickReminder,
+  type KickReminderSettings,
+} from '../utils/notifications';
 
 const STORAGE_KEY = '@sesiones_patadas';
 const PREGNANCY_START = new Date(2026, 2, 29);
@@ -77,13 +82,18 @@ export default function PatadosScreen() {
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const sesionActivaRef = useRef<SesionPatadas | null>(null);
 
+  const [recordatorio, setRecordatorio] = useState<KickReminderSettings>({ enabled: false, hour: 9, minute: 0 });
+  const [mostrarTimePicker, setMostrarTimePicker] = useState(false);
+
   const semana = semanaActual();
   const guia = guiaPorSemana(semana);
 
-  // Mantener ref sincronizada con el estado para usarla en el intervalo
   useEffect(() => { sesionActivaRef.current = sesionActiva; }, [sesionActiva]);
 
-  useEffect(() => { cargarDatos(); }, []);
+  useEffect(() => {
+    cargarDatos();
+    getKickReminderSettings().then(setRecordatorio);
+  }, []);
 
   // Intervalo del timer — usa ref para siempre tener la sesión más reciente
   useEffect(() => {
@@ -188,6 +198,24 @@ export default function PatadosScreen() {
     ]);
   }
 
+  async function toggleRecordatorio(valor: boolean) {
+    if (valor) {
+      await scheduleKickReminder(recordatorio.hour, recordatorio.minute);
+    } else {
+      await cancelKickReminder();
+    }
+    setRecordatorio(r => ({ ...r, enabled: valor }));
+  }
+
+  async function onPickerChange(_: any, date?: Date) {
+    setMostrarTimePicker(false);
+    if (!date) return;
+    const h = date.getHours();
+    const m = date.getMinutes();
+    setRecordatorio(r => ({ ...r, hour: h, minute: m }));
+    if (recordatorio.enabled) await scheduleKickReminder(h, m);
+  }
+
   async function eliminarSesion(id: string) {
     Alert.alert('Eliminar sesión', '¿Seguro que quieres eliminar este registro?', [
       { text: 'Cancelar', style: 'cancel' },
@@ -215,6 +243,43 @@ export default function PatadosScreen() {
 
         <Text style={styles.title}>Contador de patadas</Text>
         <Text style={styles.semana}>Semana {semana} · {formatFecha(hoyStr())}</Text>
+
+        {/* Recordatorio diario */}
+        <View style={styles.recordatorioCard}>
+          <View style={styles.recordatorioRow}>
+            <Text style={styles.recordatorioEmoji}>🔔</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.recordatorioTitle}>Recordatorio diario</Text>
+              <Text style={styles.recordatorioSub}>
+                {recordatorio.enabled
+                  ? `Activo · ${String(recordatorio.hour).padStart(2, '0')}:${String(recordatorio.minute).padStart(2, '0')}`
+                  : 'Desactivado'}
+              </Text>
+            </View>
+            <Switch
+              value={recordatorio.enabled}
+              onValueChange={toggleRecordatorio}
+              trackColor={{ false: '#ddd', true: '#F48FB1' }}
+              thumbColor={recordatorio.enabled ? '#C2185B' : '#f4f3f4'}
+            />
+          </View>
+          {recordatorio.enabled && (
+            <TouchableOpacity style={styles.btnHora} onPress={() => setMostrarTimePicker(true)}>
+              <Text style={styles.btnHoraText}>
+                ✏️ Cambiar hora
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {mostrarTimePicker && (
+          <DateTimePicker
+            value={(() => { const d = new Date(); d.setHours(recordatorio.hour, recordatorio.minute, 0); return d; })()}
+            mode="time"
+            display="default"
+            onChange={onPickerChange}
+          />
+        )}
 
         {/* Guía médica de la semana */}
         <View style={styles.infoCard}>
@@ -358,6 +423,17 @@ const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 20 },
   title: { fontSize: 24, fontWeight: '800', color: '#C2185B', paddingTop: 24 },
   semana: { fontSize: 13, color: '#aaa', marginTop: 4, marginBottom: 16 },
+
+  recordatorioCard: {
+    backgroundColor: '#FFF0F5', borderRadius: 14, padding: 14, marginBottom: 12,
+    borderWidth: 1, borderColor: '#FCE4EC',
+  },
+  recordatorioRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  recordatorioEmoji: { fontSize: 20 },
+  recordatorioTitle: { fontSize: 14, fontWeight: '700', color: '#880E4F' },
+  recordatorioSub: { fontSize: 12, color: '#E91E8C', marginTop: 2 },
+  btnHora: { marginTop: 10, alignSelf: 'flex-start', backgroundColor: '#FCE4EC', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 6 },
+  btnHoraText: { fontSize: 13, color: '#C2185B', fontWeight: '600' },
 
   infoCard: {
     backgroundColor: '#F3E5F5', borderRadius: 14, padding: 14,

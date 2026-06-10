@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import React, { useEffect } from 'react';
+import { setupNotifications } from './src/utils/notifications';
 
 import HomeScreen from './src/screens/HomeScreen';
 import CitasScreen from './src/screens/CitasScreen';
@@ -64,6 +66,8 @@ const STACK_HEADER = {
 };
 
 export default function App() {
+  useEffect(() => { setupNotifications(); }, []);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
