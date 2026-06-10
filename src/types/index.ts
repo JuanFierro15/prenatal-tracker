@@ -103,6 +103,13 @@ export type RegistroSintomas = {
   nota: string;
 };
 
+export type RegistroPeso = {
+  id: string;
+  fecha: string;  // 'YYYY-MM-DD'
+  semana: number;
+  peso: number;   // kg, un decimal
+};
+
 export type EntradaDiario = {
   id: string;
   fecha: string;     // 'YYYY-MM-DD'
