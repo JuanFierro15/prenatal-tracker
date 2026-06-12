@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Cita } from '../types';
 import CalendarioCitas from '../components/CalendarioCitas';
 import { ESPECIALIDAD_COLORS } from '../constants/especialidadColors';
-import { scheduleAppointmentReminder, cancelNotification } from '../utils/notifications';
+import { scheduleAppointmentNotifications, cancelNotification } from '../utils/notifications';
 
 const STORAGE_KEY = '@citas';
 
@@ -126,15 +126,16 @@ export default function CitasScreen() {
       return;
     }
 
-    // Cancelar notificación anterior si se está editando
+    // Cancelar notificaciones anteriores si se está editando
     if (editando?.notifId) await cancelNotification(editando.notifId);
+    if (editando?.notifMorningId) await cancelNotification(editando.notifMorningId);
 
     const citaBase: Cita = editando
       ? { ...form, id: editando.id }
       : { ...form, id: Date.now().toString() };
 
-    const notifId = await scheduleAppointmentReminder(citaBase);
-    const citaFinal: Cita = notifId ? { ...citaBase, notifId } : citaBase;
+    const { notifId, notifMorningId } = await scheduleAppointmentNotifications(citaBase);
+    const citaFinal: Cita = { ...citaBase, ...(notifId && { notifId }), ...(notifMorningId && { notifMorningId }) };
 
     let nuevas: Cita[];
     if (editando) {
@@ -155,6 +156,7 @@ export default function CitasScreen() {
         onPress: async () => {
           const cita = citas.find(c => c.id === id);
           if (cita?.notifId) await cancelNotification(cita.notifId);
+          if (cita?.notifMorningId) await cancelNotification(cita.notifMorningId);
           const nuevas = citas.filter(c => c.id !== id);
           await guardarCitas(nuevas);
         },

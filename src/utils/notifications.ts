@@ -33,37 +33,67 @@ export async function setupNotifications(): Promise<boolean> {
 
 // ── Citas ────────────────────────────────────────────────────────────────────
 
-export async function scheduleAppointmentReminder(cita: Cita): Promise<string | null> {
-  if (!cita.fecha || !cita.hora) return null;
+export type AppointmentNotifs = {
+  notifId: string | null;
+  notifMorningId: string | null;
+};
 
+export async function scheduleAppointmentNotifications(cita: Cita): Promise<AppointmentNotifs> {
+  const result: AppointmentNotifs = { notifId: null, notifMorningId: null };
+  if (!cita.fecha || !cita.hora) return result;
+
+  const now = new Date();
+
+  // ── Recordatorio 3 horas antes ──
   const citaDate = new Date(`${cita.fecha}T${cita.hora}:00`);
-  const reminderDate = new Date(citaDate.getTime() - 60 * 60 * 1000);
+  const reminderDate = new Date(citaDate.getTime() - 3 * 60 * 60 * 1000);
 
-  if (reminderDate <= new Date()) {
-    console.log('[Notif] Reminder time already passed, skipping:', reminderDate.toISOString());
-    return null;
+  if (reminderDate > now) {
+    try {
+      result.notifId = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: '🏥 Cita médica en 3 horas',
+          body: `${cita.especialidad} con ${cita.medico} a las ${cita.hora}`,
+          sound: true,
+          data: { citaId: cita.id },
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.DATE,
+          date: reminderDate,
+          channelId: 'default',
+        },
+      });
+      console.log('[Notif] 3h reminder scheduled for', reminderDate.toISOString());
+    } catch (e) {
+      console.error('[Notif] Failed to schedule 3h reminder:', e);
+    }
   }
 
-  try {
-    const id = await Notifications.scheduleNotificationAsync({
-      content: {
-        title: '🏥 Cita médica en 1 hora',
-        body: `${cita.especialidad} con ${cita.medico} a las ${cita.hora}`,
-        sound: true,
-        data: { citaId: cita.id },
-      },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.DATE,
-        date: reminderDate,
-        channelId: 'default',
-      },
-    });
-    console.log('[Notif] Appointment reminder scheduled:', id, 'for', reminderDate.toISOString());
-    return id;
-  } catch (e) {
-    console.error('[Notif] Failed to schedule appointment reminder:', e);
-    return null;
+  // ── Aviso a las 8 AM del día de la cita ──
+  const morningDate = new Date(`${cita.fecha}T08:00:00`);
+
+  if (morningDate > now) {
+    try {
+      result.notifMorningId = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: '📅 Tienes una cita médica hoy',
+          body: `${cita.especialidad} con ${cita.medico} a las ${cita.hora}`,
+          sound: true,
+          data: { citaId: cita.id },
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.DATE,
+          date: morningDate,
+          channelId: 'default',
+        },
+      });
+      console.log('[Notif] Morning reminder scheduled for', morningDate.toISOString());
+    } catch (e) {
+      console.error('[Notif] Failed to schedule morning reminder:', e);
+    }
   }
+
+  return result;
 }
 
 export async function scheduleTestNotification(): Promise<void> {
