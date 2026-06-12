@@ -1,11 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text } from 'react-native';
+import { Text, LogBox } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React, { useEffect } from 'react';
 import { setupNotifications } from './src/utils/notifications';
+
+// Expo Go SDK 53+ removió push tokens remotos; solo usamos notificaciones locales
+LogBox.ignoreLogs(['expo-notifications: Android Push notifications']);
 
 import HomeScreen from './src/screens/HomeScreen';
 import CitasScreen from './src/screens/CitasScreen';
