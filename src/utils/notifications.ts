@@ -48,7 +48,10 @@ export async function scheduleAppointmentReminder(cita: Cita): Promise<string | 
         sound: true,
         data: { citaId: cita.id },
       },
-      trigger: { date: reminderDate },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: reminderDate,
+      },
     });
     return id;
   } catch {
@@ -94,7 +97,11 @@ export async function scheduleKickReminder(hour: number, minute: number): Promis
         body: 'Recuerda registrar los movimientos del bebé hoy',
         sound: true,
       },
-      trigger: { hour, minute, repeats: true },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour,
+        minute,
+      },
     });
     await AsyncStorage.multiSet([
       [KEY_KICK_ID, id],
