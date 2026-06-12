@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SesionPatadas } from '../types';
 import {
   getKickReminderSettings, scheduleKickReminder, cancelKickReminder,
-  type KickReminderSettings,
+  scheduleTestNotification, type KickReminderSettings,
 } from '../utils/notifications';
 
 const STORAGE_KEY = '@sesiones_patadas';
@@ -264,11 +264,17 @@ export default function PatadosScreen() {
             />
           </View>
           {recordatorio.enabled && (
-            <TouchableOpacity style={styles.btnHora} onPress={() => setMostrarTimePicker(true)}>
-              <Text style={styles.btnHoraText}>
-                ✏️ Cambiar hora
-              </Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 8, marginTop: 10 }}>
+              <TouchableOpacity style={styles.btnHora} onPress={() => setMostrarTimePicker(true)}>
+                <Text style={styles.btnHoraText}>✏️ Cambiar hora</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.btnHora, { backgroundColor: '#E8F5E9' }]}
+                onPress={scheduleTestNotification}
+              >
+                <Text style={[styles.btnHoraText, { color: '#2E7D32' }]}>🔔 Probar (5 seg)</Text>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
 

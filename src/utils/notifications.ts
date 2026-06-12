@@ -36,9 +36,12 @@ export async function scheduleAppointmentReminder(cita: Cita): Promise<string | 
   if (!cita.fecha || !cita.hora) return null;
 
   const citaDate = new Date(`${cita.fecha}T${cita.hora}:00`);
-  const reminderDate = new Date(citaDate.getTime() - 60 * 60 * 1000); // 1 hora antes
+  const reminderDate = new Date(citaDate.getTime() - 60 * 60 * 1000);
 
-  if (reminderDate <= new Date()) return null;
+  if (reminderDate <= new Date()) {
+    console.log('[Notif] Reminder time already passed, skipping:', reminderDate.toISOString());
+    return null;
+  }
 
   try {
     const id = await Notifications.scheduleNotificationAsync({
@@ -51,11 +54,34 @@ export async function scheduleAppointmentReminder(cita: Cita): Promise<string | 
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: reminderDate,
+        channelId: 'default',
       },
     });
+    console.log('[Notif] Appointment reminder scheduled:', id, 'for', reminderDate.toISOString());
     return id;
-  } catch {
+  } catch (e) {
+    console.error('[Notif] Failed to schedule appointment reminder:', e);
     return null;
+  }
+}
+
+export async function scheduleTestNotification(): Promise<void> {
+  try {
+    const id = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: '✅ Notificaciones funcionando',
+        body: 'Las notificaciones locales están activas en esta app',
+        sound: true,
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+        seconds: 5,
+        repeats: false,
+      },
+    });
+    console.log('[Notif] Test notification scheduled:', id);
+  } catch (e) {
+    console.error('[Notif] Test notification failed:', e);
   }
 }
 
@@ -101,15 +127,19 @@ export async function scheduleKickReminder(hour: number, minute: number): Promis
         type: Notifications.SchedulableTriggerInputTypes.DAILY,
         hour,
         minute,
+        channelId: 'default',
       },
     });
+    console.log('[Notif] Kick reminder scheduled:', id, `at ${hour}:${String(minute).padStart(2,'0')}`);
     await AsyncStorage.multiSet([
       [KEY_KICK_ID, id],
       [KEY_KICK_ENABLED, 'true'],
       [KEY_KICK_HOUR, String(hour)],
       [KEY_KICK_MINUTE, String(minute)],
     ]);
-  } catch {}
+  } catch (e) {
+    console.error('[Notif] Failed to schedule kick reminder:', e);
+  }
 }
 
 export async function cancelKickReminder(): Promise<void> {
