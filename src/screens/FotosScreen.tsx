@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system/legacy';
 import { FotoSemana, Momento } from '../types';
 
 const KEY_SEMANAS  = '@fotos_semanas';
@@ -47,7 +48,21 @@ async function elegirFoto(): Promise<string | null> {
     allowsEditing: true,
     quality: 0.8,
   });
-  return result.canceled ? null : result.assets[0].uri;
+  if (result.canceled) return null;
+
+  // Copiar al directorio permanente de la app para que no dependa del caché
+  const tempUri = result.assets[0].uri;
+  const ext = tempUri.split('.').pop()?.split('?')[0] ?? 'jpg';
+  const permanentUri = `${FileSystem.documentDirectory}foto_${Date.now()}.${ext}`;
+  await FileSystem.copyAsync({ from: tempUri, to: permanentUri });
+  return permanentUri;
+}
+
+async function borrarArchivoFoto(uri: string) {
+  try {
+    const info = await FileSystem.getInfoAsync(uri);
+    if (info.exists) await FileSystem.deleteAsync(uri, { idempotent: true });
+  } catch {}
 }
 
 type Vista = 'progresion' | 'momentos';
@@ -98,6 +113,8 @@ export default function FotosScreen() {
       {
         text: 'Eliminar', style: 'destructive',
         onPress: async () => {
+          const foto = semanas.find(s => s.semana === num);
+          if (foto) await borrarArchivoFoto(foto.uri);
           const actualizadas = semanas.filter(s => s.semana !== num);
           setSemanas(actualizadas);
           await AsyncStorage.setItem(KEY_SEMANAS, JSON.stringify(actualizadas));
@@ -144,6 +161,8 @@ export default function FotosScreen() {
       {
         text: 'Eliminar', style: 'destructive',
         onPress: async () => {
+          const momento = momentos.find(m => m.id === id);
+          if (momento) await borrarArchivoFoto(momento.uri);
           const actualizados = momentos.filter(m => m.id !== id);
           setMomentos(actualizados);
           await AsyncStorage.setItem(KEY_MOMENTOS, JSON.stringify(actualizados));
