@@ -96,25 +96,6 @@ export async function scheduleAppointmentNotifications(cita: Cita): Promise<Appo
   return result;
 }
 
-export async function scheduleTestNotification(): Promise<void> {
-  try {
-    const id = await Notifications.scheduleNotificationAsync({
-      content: {
-        title: '✅ Notificaciones funcionando',
-        body: 'Las notificaciones locales están activas en esta app',
-        sound: true,
-      },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-        seconds: 5,
-        repeats: false,
-      },
-    });
-    console.log('[Notif] Test notification scheduled:', id);
-  } catch (e) {
-    console.error('[Notif] Test notification failed:', e);
-  }
-}
 
 export async function cancelNotification(notifId: string): Promise<void> {
   try {
