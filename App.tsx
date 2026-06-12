@@ -22,6 +22,7 @@ import NombresScreen from './src/screens/NombresScreen';
 import FotosScreen from './src/screens/FotosScreen';
 import EmergenciaScreen from './src/screens/EmergenciaScreen';
 import PesoScreen from './src/screens/PesoScreen';
+import BackupScreen from './src/screens/BackupScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -86,6 +87,7 @@ export default function App() {
           <Stack.Screen name="Fotos"         component={FotosScreen}         options={STACK_HEADER} />
           <Stack.Screen name="Emergencia"   component={EmergenciaScreen}   options={STACK_HEADER} />
           <Stack.Screen name="Peso"         component={PesoScreen}         options={STACK_HEADER} />
+          <Stack.Screen name="Backup"       component={BackupScreen}       options={STACK_HEADER} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

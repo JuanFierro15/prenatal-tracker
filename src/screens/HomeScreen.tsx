@@ -18,6 +18,7 @@ const FEATURES = [
   { icon: '💝', label: 'Nombres',        color: '#FDF4FF', tab: 'Nombres' },
   { icon: '🚨', label: 'Emergencia',     color: '#FFF5F5', tab: 'Emergencia' },
   { icon: '⚖️', label: 'Peso',          color: '#F3E5F5', tab: 'Peso' },
+  { icon: '💾', label: 'Backup',        color: '#E8F5E9', tab: 'Backup' },
 ];
 
 export default function HomeScreen() {
