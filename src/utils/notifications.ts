@@ -11,7 +11,8 @@ const KEY_KICK_MINUTE  = '@kick_reminder_minute';
 export async function setupNotifications(): Promise<boolean> {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
       shouldPlaySound: true,
       shouldSetBadge: false,
     }),
