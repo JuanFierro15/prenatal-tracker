@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
+import * as IntentLauncher from 'expo-intent-launcher';
 import { DocumentoPDF } from '../types';
 
 const KEY = '@documentos_pdf';
@@ -129,13 +130,23 @@ export default function DocumentosScreen() {
         Alert.alert('Archivo no encontrado', 'El archivo fue eliminado del teléfono.');
         return;
       }
-      await Sharing.shareAsync(doc.uri, {
-        mimeType: 'application/pdf',
-        UTI: 'com.adobe.pdf',
-        dialogTitle: doc.nombre,
-      });
+
+      if (Platform.OS === 'android') {
+        // Convertir file:// a content:// para que Android pueda abrirlo
+        const contentUri = await FileSystem.getContentUriAsync(doc.uri);
+        await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+          data: contentUri,
+          flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
+          type: 'application/pdf',
+        });
+      } else {
+        await Sharing.shareAsync(doc.uri, {
+          mimeType: 'application/pdf',
+          UTI: 'com.adobe.pdf',
+        });
+      }
     } catch {
-      Alert.alert('Error', 'No se pudo abrir el archivo.');
+      Alert.alert('Error', 'No se pudo abrir el archivo. Asegúrate de tener una app lectora de PDF instalada.');
     }
   }
 
