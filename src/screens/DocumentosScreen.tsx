@@ -43,6 +43,7 @@ function formatFecha(s: string): string {
 export default function DocumentosScreen() {
   const [documentos, setDocumentos] = useState<DocumentoPDF[]>([]);
   const [categoriaActiva, setCategoriaActiva] = useState('todos');
+  const [semanaActiva, setSemanaActiva] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   // Campos del formulario
@@ -174,9 +175,22 @@ export default function DocumentosScreen() {
 
   // ── Render ───────────────────────────────────────────────────────────────────
 
-  const docsFiltrados = categoriaActiva === 'todos'
+  const docsPorCategoria = categoriaActiva === 'todos'
     ? documentos
     : documentos.filter(d => d.categoria === categoriaActiva);
+
+  const semanasDisponibles = Array.from(
+    new Set(docsPorCategoria.map(d => d.semana))
+  ).sort((a, b) => a - b);
+
+  const docsFiltrados = semanaActiva === null
+    ? docsPorCategoria
+    : docsPorCategoria.filter(d => d.semana === semanaActiva);
+
+  function cambiarCategoria(id: string) {
+    setCategoriaActiva(id);
+    setSemanaActiva(null);
+  }
 
   const catInfo = (id: string) => CATEGORIAS.find(c => c.id === id) ?? CATEGORIAS[5];
 
@@ -202,7 +216,7 @@ export default function DocumentosScreen() {
             <TouchableOpacity
               key={cat.id}
               style={[styles.catChip, categoriaActiva === cat.id && styles.catChipActivo]}
-              onPress={() => setCategoriaActiva(cat.id)}
+              onPress={() => cambiarCategoria(cat.id)}
               activeOpacity={0.7}
             >
               <Text style={styles.catEmoji}>{cat.emoji}</Text>
@@ -217,6 +231,37 @@ export default function DocumentosScreen() {
             </TouchableOpacity>
           ))}
         </ScrollView>
+
+        {/* Filtro de semanas */}
+        {semanasDisponibles.length > 0 && (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.semanasScroll}
+          >
+            <TouchableOpacity
+              style={[styles.semanaChip, semanaActiva === null && styles.semanaChipActivo]}
+              onPress={() => setSemanaActiva(null)}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.semanaChipText, semanaActiva === null && styles.semanaChipTextActivo]}>
+                Todas
+              </Text>
+            </TouchableOpacity>
+            {semanasDisponibles.map(s => (
+              <TouchableOpacity
+                key={s}
+                style={[styles.semanaChip, semanaActiva === s && styles.semanaChipActivo]}
+                onPress={() => setSemanaActiva(semanaActiva === s ? null : s)}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.semanaChipText, semanaActiva === s && styles.semanaChipTextActivo]}>
+                  Sem. {s}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
 
         {/* Lista de documentos */}
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
@@ -422,4 +467,14 @@ const styles = StyleSheet.create({
   btnGuardar: { flex: 1, backgroundColor: '#C2185B', borderRadius: 14, paddingVertical: 14, alignItems: 'center' },
   btnGuardarDisabled: { backgroundColor: '#ddd' },
   btnGuardarText: { color: '#fff', fontWeight: '700', fontSize: 15 },
+
+  // Semanas
+  semanasScroll: { gap: 8, paddingBottom: 12, paddingRight: 4 },
+  semanaChip: {
+    borderRadius: 16, paddingHorizontal: 14, paddingVertical: 6,
+    backgroundColor: '#F7F7F7', borderWidth: 1.5, borderColor: '#eee',
+  },
+  semanaChipActivo: { backgroundColor: '#FCE4EC', borderColor: '#C2185B' },
+  semanaChipText: { fontSize: 12, fontWeight: '600', color: '#888' },
+  semanaChipTextActivo: { color: '#C2185B' },
 });
