@@ -6,20 +6,38 @@ import { DESARROLLO_POR_SEMANA } from '../constants/desarrolloData';
 const PREGNANCY_START = new Date(2026, 2, 29);
 const DUE_DATE_EARLY = new Date(2026, 11, 13);
 
-const FEATURES = [
-  { icon: '📅', label: 'Citas médicas',  color: '#E8F4FD', tab: 'Citas' },
-  { icon: '📖', label: 'Diario',         color: '#FEF3E2', tab: 'Diario' },
-  { icon: '👶', label: 'Desarrollo',     color: '#F0FDF4', tab: 'Desarrollo' },
-  { icon: '🦵', label: 'Patadas',        color: '#FDF2F8', tab: 'Patadas' },
-  { icon: '📊', label: 'Síntomas',       color: '#FFF7ED', tab: 'Síntomas' },
-  { icon: '📷', label: 'Fotos',          color: '#F0F9FF', tab: 'Fotos' },
-  { icon: '✅', label: 'Checklist',      color: '#F7F7FF', tab: 'Checklist' },
-  { icon: '⏱️', label: 'Contracciones', color: '#FFF1F2', tab: 'Contracciones' },
-  { icon: '💝', label: 'Nombres',        color: '#FDF4FF', tab: 'Nombres' },
-  { icon: '🚨', label: 'Emergencia',     color: '#FFF5F5', tab: 'Emergencia' },
-  { icon: '⚖️', label: 'Peso',          color: '#F3E5F5', tab: 'Peso' },
-  { icon: '💾', label: 'Backup',        color: '#E8F5E9', tab: 'Backup' },
-  { icon: '🗂️', label: 'Documentos',   color: '#E3F2FD', tab: 'Documentos' },
+const DESTACADAS = [
+  { icon: '📅', label: 'Citas médicas', color: '#E8F4FD', tab: 'Citas' },
+  { icon: '📖', label: 'Diario',        color: '#FEF3E2', tab: 'Diario' },
+  { icon: '🦵', label: 'Patadas',       color: '#FDF2F8', tab: 'Patadas' },
+  { icon: '👶', label: 'Desarrollo',    color: '#F0FDF4', tab: 'Desarrollo' },
+];
+
+const SECCIONES = [
+  {
+    titulo: 'Seguimiento',
+    items: [
+      { icon: '⚖️', label: 'Peso',          color: '#F3E5F5', tab: 'Peso' },
+      { icon: '📊', label: 'Síntomas',      color: '#FFF7ED', tab: 'Síntomas' },
+      { icon: '⏱️', label: 'Contracciones', color: '#FFF1F2', tab: 'Contracciones' },
+      { icon: '✅', label: 'Checklist',     color: '#F7F7FF', tab: 'Checklist' },
+    ],
+  },
+  {
+    titulo: 'Mis registros',
+    items: [
+      { icon: '📷', label: 'Fotos',       color: '#F0F9FF', tab: 'Fotos' },
+      { icon: '💝', label: 'Nombres',     color: '#FDF4FF', tab: 'Nombres' },
+      { icon: '🗂️', label: 'Documentos', color: '#E3F2FD', tab: 'Documentos' },
+    ],
+  },
+  {
+    titulo: 'Herramientas',
+    items: [
+      { icon: '🚨', label: 'Emergencia', color: '#FFF5F5', tab: 'Emergencia' },
+      { icon: '💾', label: 'Backup',     color: '#E8F5E9', tab: 'Backup' },
+    ],
+  },
 ];
 
 export default function HomeScreen() {
@@ -41,6 +59,7 @@ export default function HomeScreen() {
           <Text style={styles.subtitle}>El camino de ser buenos padres 💕</Text>
         </View>
 
+        {/* Tarjeta de semana */}
         <View style={styles.weekCard}>
           <View style={styles.weekCardLeft}>
             <Text style={styles.weekLabel}>Semana</Text>
@@ -57,6 +76,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* Fecha probable */}
         <View style={styles.dueDateCard}>
           <Text style={styles.dueDateLabel}>📆  Fecha probable de parto</Text>
           <Text style={styles.dueDateRange}>13 Dic 2026 – 3 Ene 2027</Text>
@@ -65,22 +85,47 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        <Text style={styles.sectionTitle}>¿Qué deseas registrar?</Text>
-        <View style={styles.grid}>
-          {FEATURES.map((f) => (
+        {/* Accesos destacados */}
+        <Text style={styles.sectionTitle}>Accesos rápidos</Text>
+        <View style={styles.gridDestacadas}>
+          {DESTACADAS.map((f) => (
             <TouchableOpacity
               key={f.label}
-              style={[styles.featureCard, { backgroundColor: f.color }]}
+              style={[styles.cardDestacada, { backgroundColor: f.color }]}
               activeOpacity={0.7}
-              onPress={() => f.tab && navigation.navigate(f.tab)}
+              onPress={() => navigation.navigate(f.tab)}
             >
-              <Text style={styles.featureIcon}>{f.icon}</Text>
-              <Text style={styles.featureLabel}>{f.label}</Text>
-              {!f.tab && <Text style={styles.comingSoon}>Próximamente</Text>}
+              <Text style={styles.iconDestacada}>{f.icon}</Text>
+              <Text style={styles.labelDestacada}>{f.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
+        {/* Secciones secundarias */}
+        {SECCIONES.map((sec) => (
+          <View key={sec.titulo} style={styles.seccionBloque}>
+            <View style={styles.seccionHeader}>
+              <View style={styles.seccionLinea} />
+              <Text style={styles.seccionTitulo}>{sec.titulo}</Text>
+              <View style={styles.seccionLinea} />
+            </View>
+            <View style={styles.gridSecundario}>
+              {sec.items.map((f) => (
+                <TouchableOpacity
+                  key={f.label}
+                  style={[styles.cardSecundaria, { backgroundColor: f.color }]}
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate(f.tab)}
+                >
+                  <Text style={styles.iconSecundaria}>{f.icon}</Text>
+                  <Text style={styles.labelSecundaria}>{f.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        ))}
+
+        <View style={{ height: 40 }} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -89,9 +134,11 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#FFF5F7' },
   container: { flex: 1, paddingHorizontal: 20 },
+
   header: { paddingTop: 24, paddingBottom: 20, alignItems: 'center' },
   appName: { fontSize: 30, fontWeight: '800', color: '#C2185B', letterSpacing: 0.5 },
   subtitle: { fontSize: 14, color: '#999', marginTop: 4 },
+
   weekCard: {
     backgroundColor: '#fff', borderRadius: 24, padding: 22, flexDirection: 'row',
     shadowColor: '#C2185B', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.12,
@@ -102,22 +149,45 @@ const styles = StyleSheet.create({
   weekNumber: { fontSize: 56, fontWeight: '900', color: '#C2185B', lineHeight: 64 },
   weekSub: { fontSize: 13, color: '#bbb' },
   pillContainer: { marginTop: 12 },
-  pill: { backgroundColor: '#FCE4EC', color: '#C2185B', fontSize: 12, fontWeight: '600', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, alignSelf: 'flex-start' },
+  pill: {
+    backgroundColor: '#FCE4EC', color: '#C2185B', fontSize: 12, fontWeight: '600',
+    paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, alignSelf: 'flex-start',
+  },
   weekCardRight: { alignItems: 'center', justifyContent: 'center', paddingLeft: 16, minWidth: 110 },
   fruitEmoji: { fontSize: 56 },
   fruitLabel: { fontSize: 11, color: '#bbb', marginTop: 8, textAlign: 'center' },
   fruitName: { fontSize: 13, color: '#555', fontWeight: '700', textAlign: 'center', marginTop: 2 },
-  dueDateCard: { backgroundColor: '#FCE4EC', borderRadius: 18, padding: 16, alignItems: 'center', marginBottom: 28 },
+
+  dueDateCard: {
+    backgroundColor: '#FCE4EC', borderRadius: 18, padding: 16,
+    alignItems: 'center', marginBottom: 28,
+  },
   dueDateLabel: { fontSize: 13, color: '#C2185B', fontWeight: '600' },
   dueDateRange: { fontSize: 18, color: '#880E4F', fontWeight: '800', marginTop: 6 },
   dueDateSub: { fontSize: 12, color: '#E91E8C', marginTop: 4 },
-  sectionTitle: { fontSize: 17, fontWeight: '700', color: '#333', marginBottom: 14 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingBottom: 40 },
-  featureCard: {
-    width: '47%', borderRadius: 18, padding: 18, alignItems: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3,
+
+  // Accesos destacados — 2 columnas, cards más grandes
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#888', marginBottom: 12, textTransform: 'uppercase', letterSpacing: 0.8 },
+  gridDestacadas: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 28 },
+  cardDestacada: {
+    width: '47%', borderRadius: 20, padding: 20, alignItems: 'center',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.08, shadowRadius: 10, elevation: 4,
   },
-  featureIcon: { fontSize: 34 },
-  featureLabel: { fontSize: 13, color: '#444', marginTop: 10, fontWeight: '600', textAlign: 'center' },
-  comingSoon: { fontSize: 10, color: '#bbb', marginTop: 4 },
+  iconDestacada: { fontSize: 40 },
+  labelDestacada: { fontSize: 14, color: '#333', marginTop: 10, fontWeight: '700', textAlign: 'center' },
+
+  // Secciones secundarias
+  seccionBloque: { marginBottom: 24 },
+  seccionHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 },
+  seccionLinea: { flex: 1, height: 1, backgroundColor: '#F0E0E6' },
+  seccionTitulo: { fontSize: 12, fontWeight: '700', color: '#C2185B', textTransform: 'uppercase', letterSpacing: 1 },
+
+  // Cards secundarias — 4 por fila (25% aprox)
+  gridSecundario: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  cardSecundaria: {
+    width: '22%', borderRadius: 16, paddingVertical: 14, alignItems: 'center',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 6, elevation: 2,
+  },
+  iconSecundaria: { fontSize: 26 },
+  labelSecundaria: { fontSize: 10, color: '#555', marginTop: 6, fontWeight: '600', textAlign: 'center' },
 });
