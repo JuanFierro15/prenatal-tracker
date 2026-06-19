@@ -4,8 +4,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, LogBox } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setupNotifications } from './src/utils/notifications';
+import OnboardingScreen from './src/screens/OnboardingScreen';
 
 // Expo Go SDK 53+ removió push tokens remotos; solo usamos notificaciones locales
 LogBox.ignoreLogs(['expo-notifications: Android Push notifications']);
@@ -72,7 +74,27 @@ const STACK_HEADER = {
 };
 
 export default function App() {
-  useEffect(() => { setupNotifications(); }, []);
+  const [listo, setListo] = useState(false);
+  const [configurado, setConfigurado] = useState(false);
+
+  useEffect(() => {
+    setupNotifications();
+    AsyncStorage.getItem('@config_embarazo').then(val => {
+      setConfigurado(!!val);
+      setListo(true);
+    });
+  }, []);
+
+  if (!listo) return null;
+
+  if (!configurado) {
+    return (
+      <SafeAreaProvider>
+        <StatusBar style="dark" />
+        <OnboardingScreen onComplete={() => setConfigurado(true)} />
+      </SafeAreaProvider>
+    );
+  }
 
   return (
     <SafeAreaProvider>

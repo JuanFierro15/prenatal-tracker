@@ -121,6 +121,14 @@ export type RegistroPeso = {
   peso: number;   // kg, un decimal
 };
 
+export type ConfigEmbarazo = {
+  nombreBebe: string;
+  nombreMama: string;
+  nombrePapa: string;
+  fechaInicio: string;  // 'YYYY-MM-DD' FUR (fecha última regla)
+  sexoBebe: 'niño' | 'niña' | 'desconocido';
+};
+
 export type EntradaDiario = {
   id: string;
   fecha: string;     // 'YYYY-MM-DD'

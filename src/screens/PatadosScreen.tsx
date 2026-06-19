@@ -13,14 +13,7 @@ import {
 } from '../utils/notifications';
 
 const STORAGE_KEY = '@sesiones_patadas';
-const PREGNANCY_START = new Date(2026, 2, 29);
 const DURACION_MS = 120 * 60 * 1000; // 120 minutos Cardiff
-
-function semanaActual(): number {
-  const hoy = new Date();
-  const dias = Math.floor((hoy.getTime() - PREGNANCY_START.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.floor(dias / 7);
-}
 
 function hoyStr(): string {
   const h = new Date();
@@ -84,8 +77,9 @@ export default function PatadosScreen() {
 
   const [recordatorio, setRecordatorio] = useState<KickReminderSettings>({ enabled: false, hour: 9, minute: 0 });
   const [mostrarTimePicker, setMostrarTimePicker] = useState(false);
+  const [pregnancyStart, setPregnancyStart] = useState(new Date());
 
-  const semana = semanaActual();
+  const semana = Math.max(0, Math.floor((Date.now() - pregnancyStart.getTime()) / (1000 * 60 * 60 * 24 * 7)));
   const guia = guiaPorSemana(semana);
 
   useEffect(() => { sesionActivaRef.current = sesionActiva; }, [sesionActiva]);
@@ -93,6 +87,12 @@ export default function PatadosScreen() {
   useEffect(() => {
     cargarDatos();
     getKickReminderSettings().then(setRecordatorio);
+    AsyncStorage.getItem('@config_embarazo').then(val => {
+      if (val) {
+        const cfg = JSON.parse(val);
+        setPregnancyStart(new Date(cfg.fechaInicio));
+      }
+    });
   }, []);
 
   // Intervalo del timer — usa ref para siempre tener la sesión más reciente

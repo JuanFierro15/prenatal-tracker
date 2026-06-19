@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import React, { useState, useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DESARROLLO_POR_SEMANA } from '../constants/desarrolloData';
+import { ConfigEmbarazo } from '../types';
 
-const PREGNANCY_START = new Date(2026, 2, 29);
-const DUE_DATE_EARLY = new Date(2026, 11, 13);
+const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
 const DESTACADAS = [
   { icon: '📅', label: 'Citas médicas', color: '#E8F4FD', tab: 'Citas' },
@@ -42,11 +44,32 @@ const SECCIONES = [
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
+  const [config, setConfig] = useState<ConfigEmbarazo | null>(null);
+
+  useFocusEffect(useCallback(() => {
+    AsyncStorage.getItem('@config_embarazo').then(val => {
+      if (val) setConfig(JSON.parse(val));
+    });
+  }, []));
+
   const today = new Date();
-  const diffDays = Math.floor((today.getTime() - PREGNANCY_START.getTime()) / (1000 * 60 * 60 * 24));
-  const currentWeek = Math.floor(diffDays / 7);
-  const daysUntilDue = Math.ceil((DUE_DATE_EARLY.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  const weeksLeft = 40 - currentWeek;
+  const pregnancyStart = config ? new Date(config.fechaInicio) : new Date();
+  const diffDays = Math.floor((today.getTime() - pregnancyStart.getTime()) / (1000 * 60 * 60 * 24));
+  const currentWeek = Math.max(0, Math.floor(diffDays / 7));
+  const dueDate = new Date(pregnancyStart.getTime() + 280 * 86400000);
+  const earlyDate = new Date(pregnancyStart.getTime() + 258 * 86400000); // 37 semanas
+  const daysUntilDue = Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const weeksLeft = Math.max(0, 40 - currentWeek);
+
+  const dueDateStr = `${dueDate.getDate()} ${MESES[dueDate.getMonth()]} ${dueDate.getFullYear()}`;
+  const earlyDateStr = `${earlyDate.getDate()} ${MESES[earlyDate.getMonth()]} ${earlyDate.getFullYear()}`;
+
+  const appTitle = config?.nombreBebe || 'Mi Bebé';
+  const appSubtitle = config
+    ? config.nombrePapa
+      ? `Hola ${config.nombreMama} y ${config.nombrePapa} 💕`
+      : `Hola ${config.nombreMama} 💕`
+    : 'El camino de ser buenos padres 💕';
 
   const fruitInfo = DESARROLLO_POR_SEMANA[currentWeek] ?? { fruta: 'bebé creciendo', frutaEmoji: '🌱', articulo: 'un' };
 
@@ -55,8 +78,8 @@ export default function HomeScreen() {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
         <View style={styles.header}>
-          <Text style={styles.appName}>Bebe Totodrilo</Text>
-          <Text style={styles.subtitle}>El camino de ser buenos padres 💕</Text>
+          <Text style={styles.appName}>{appTitle}</Text>
+          <Text style={styles.subtitle}>{appSubtitle}</Text>
         </View>
 
         {/* Tarjeta de semana */}
@@ -79,7 +102,7 @@ export default function HomeScreen() {
         {/* Fecha probable */}
         <View style={styles.dueDateCard}>
           <Text style={styles.dueDateLabel}>📆  Fecha probable de parto</Text>
-          <Text style={styles.dueDateRange}>13 Dic 2026 – 3 Ene 2027</Text>
+          <Text style={styles.dueDateRange}>{earlyDateStr} – {dueDateStr}</Text>
           <Text style={styles.dueDateSub}>
             {daysUntilDue > 0 ? `Faltan aproximadamente ${daysUntilDue} días` : '¡El bebé ya llegó! 🎉'}
           </Text>
