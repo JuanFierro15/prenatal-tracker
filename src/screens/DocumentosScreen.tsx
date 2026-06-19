@@ -49,6 +49,7 @@ export default function DocumentosScreen() {
   // Campos del formulario
   const [formNombre, setFormNombre] = useState('');
   const [formCategoria, setFormCategoria] = useState('controles');
+  const [formSemana, setFormSemana] = useState(semanaActual());
   const [formUri, setFormUri] = useState('');
   const [formArchivo, setFormArchivo] = useState('');
   const [cargando, setCargando] = useState(false);
@@ -107,7 +108,7 @@ export default function DocumentosScreen() {
       uri: formUri,
       categoria: formCategoria,
       fecha: hoyStr(),
-      semana: semanaActual(),
+      semana: formSemana,
     };
     await guardar([nuevo, ...documentos]);
     cerrarModal();
@@ -117,6 +118,7 @@ export default function DocumentosScreen() {
   function abrirModal() {
     setFormNombre('');
     setFormCategoria('controles');
+    setFormSemana(semanaActual());
     setFormUri('');
     setFormArchivo('');
     setModalVisible(true);
@@ -343,6 +345,29 @@ export default function DocumentosScreen() {
               onChangeText={setFormNombre}
             />
 
+            {/* Semana */}
+            <Text style={styles.fieldLabel}>Semana del embarazo</Text>
+            <View style={styles.semanaSelector}>
+              <TouchableOpacity
+                style={styles.semanaBtnStepper}
+                onPress={() => setFormSemana(s => Math.max(1, s - 1))}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.semanaBtnStepperText}>−</Text>
+              </TouchableOpacity>
+              <View style={styles.semanaValBox}>
+                <Text style={styles.semanaVal}>{formSemana}</Text>
+                <Text style={styles.semanaValSub}>de 40</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.semanaBtnStepper}
+                onPress={() => setFormSemana(s => Math.min(42, s + 1))}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.semanaBtnStepperText}>+</Text>
+              </TouchableOpacity>
+            </View>
+
             {/* Categoría */}
             <Text style={styles.fieldLabel}>Categoría</Text>
             <View style={styles.catGrid}>
@@ -467,6 +492,20 @@ const styles = StyleSheet.create({
   btnGuardar: { flex: 1, backgroundColor: '#C2185B', borderRadius: 14, paddingVertical: 14, alignItems: 'center' },
   btnGuardarDisabled: { backgroundColor: '#ddd' },
   btnGuardarText: { color: '#fff', fontWeight: '700', fontSize: 15 },
+
+  // Selector de semana en modal
+  semanaSelector: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    gap: 16, marginBottom: 16,
+  },
+  semanaBtnStepper: {
+    width: 44, height: 44, borderRadius: 22,
+    backgroundColor: '#FCE4EC', alignItems: 'center', justifyContent: 'center',
+  },
+  semanaBtnStepperText: { fontSize: 24, color: '#C2185B', fontWeight: '700', lineHeight: 28 },
+  semanaValBox: { alignItems: 'center', minWidth: 60 },
+  semanaVal: { fontSize: 36, fontWeight: '900', color: '#C2185B' },
+  semanaValSub: { fontSize: 11, color: '#bbb', marginTop: -2 },
 
   // Semanas
   semanasScroll: { gap: 8, paddingBottom: 12, paddingRight: 4 },
