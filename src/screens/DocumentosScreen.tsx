@@ -64,12 +64,19 @@ export default function DocumentosScreen() {
     await AsyncStorage.setItem(KEY, JSON.stringify(docs));
   }
 
-  // ── Seleccionar PDF ──────────────────────────────────────────────────────────
+  // ── Seleccionar PDF o imagen ─────────────────────────────────────────────────
+
+  function detectarMime(uri: string): string {
+    const ext = uri.split('.').pop()?.toLowerCase();
+    if (ext === 'jpg' || ext === 'jpeg') return 'image/jpeg';
+    if (ext === 'png') return 'image/png';
+    return 'application/pdf';
+  }
 
   async function seleccionarPDF() {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/pdf',
+        type: ['application/pdf', 'image/jpeg', 'image/png', 'image/*'],
         copyToCacheDirectory: true,
       });
       if (result.canceled) return;
@@ -81,7 +88,7 @@ export default function DocumentosScreen() {
 
       setFormUri(permanentUri);
       setFormArchivo(asset.name);
-      if (!formNombre) setFormNombre(asset.name.replace(/\.pdf$/i, ''));
+      if (!formNombre) setFormNombre(asset.name.replace(/\.(pdf|jpg|jpeg|png)$/i, ''));
     } catch (e) {
       Alert.alert('Error', 'No se pudo cargar el archivo.');
     }
@@ -131,22 +138,19 @@ export default function DocumentosScreen() {
         return;
       }
 
+      const mime = detectarMime(doc.uri);
       if (Platform.OS === 'android') {
-        // Convertir file:// a content:// para que Android pueda abrirlo
         const contentUri = await FileSystem.getContentUriAsync(doc.uri);
         await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
           data: contentUri,
-          flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
-          type: 'application/pdf',
+          flags: 1,
+          type: mime,
         });
       } else {
-        await Sharing.shareAsync(doc.uri, {
-          mimeType: 'application/pdf',
-          UTI: 'com.adobe.pdf',
-        });
+        await Sharing.shareAsync(doc.uri, { mimeType: mime });
       }
     } catch {
-      Alert.alert('Error', 'No se pudo abrir el archivo. Asegúrate de tener una app lectora de PDF instalada.');
+      Alert.alert('Error', 'No se pudo abrir el archivo.');
     }
   }
 
@@ -220,7 +224,7 @@ export default function DocumentosScreen() {
             <View style={styles.empty}>
               <Text style={styles.emptyEmoji}>📂</Text>
               <Text style={styles.emptyText}>No hay documentos aquí.</Text>
-              <Text style={styles.emptySub}>Toca "+ Agregar" para subir un PDF.</Text>
+              <Text style={styles.emptySub}>Toca "+ Agregar" para subir un PDF o imagen.</Text>
             </View>
           ) : (
             <View style={styles.lista}>
@@ -279,7 +283,7 @@ export default function DocumentosScreen() {
               ) : (
                 <>
                   <Text style={styles.pdfPickerEmoji}>📎</Text>
-                  <Text style={styles.pdfPickerText}>Seleccionar archivo PDF</Text>
+                  <Text style={styles.pdfPickerText}>Seleccionar PDF o imagen</Text>
                 </>
               )}
             </TouchableOpacity>
