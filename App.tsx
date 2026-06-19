@@ -26,6 +26,7 @@ import EmergenciaScreen from './src/screens/EmergenciaScreen';
 import PesoScreen from './src/screens/PesoScreen';
 import BackupScreen from './src/screens/BackupScreen';
 import DocumentosScreen from './src/screens/DocumentosScreen';
+import AjustesScreen from './src/screens/AjustesScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -112,6 +113,7 @@ export default function App() {
           <Stack.Screen name="Peso"         component={PesoScreen}         options={STACK_HEADER} />
           <Stack.Screen name="Backup"       component={BackupScreen}       options={STACK_HEADER} />
           <Stack.Screen name="Documentos"   component={DocumentosScreen}   options={STACK_HEADER} />
+          <Stack.Screen name="Ajustes"      component={AjustesScreen}      options={STACK_HEADER} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

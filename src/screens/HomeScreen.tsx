@@ -78,6 +78,9 @@ export default function HomeScreen() {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
         <View style={styles.header}>
+          <TouchableOpacity style={styles.ajustesBtn} onPress={() => navigation.navigate('Ajustes')}>
+            <Text style={styles.ajustesBtnText}>⚙️</Text>
+          </TouchableOpacity>
           <Text style={styles.appName}>{appTitle}</Text>
           <Text style={styles.subtitle}>{appSubtitle}</Text>
         </View>
@@ -159,6 +162,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 20 },
 
   header: { paddingTop: 24, paddingBottom: 20, alignItems: 'center' },
+  ajustesBtn: { position: 'absolute', top: 24, right: 0, padding: 6 },
+  ajustesBtnText: { fontSize: 22 },
   appName: { fontSize: 30, fontWeight: '800', color: '#C2185B', letterSpacing: 0.5 },
   subtitle: { fontSize: 14, color: '#999', marginTop: 4 },
 
