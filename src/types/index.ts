@@ -104,6 +104,16 @@ export type RegistroSintomas = {
   nota: string;
 };
 
+export type DocumentoPDF = {
+  id: string;
+  nombre: string;    // nombre que muestra el usuario
+  archivo: string;   // nombre original del archivo
+  uri: string;       // ruta permanente en documentDirectory
+  categoria: string;
+  fecha: string;     // 'YYYY-MM-DD'
+  semana: number;
+};
+
 export type RegistroPeso = {
   id: string;
   fecha: string;  // 'YYYY-MM-DD'

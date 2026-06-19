@@ -19,6 +19,7 @@ const FEATURES = [
   { icon: '🚨', label: 'Emergencia',     color: '#FFF5F5', tab: 'Emergencia' },
   { icon: '⚖️', label: 'Peso',          color: '#F3E5F5', tab: 'Peso' },
   { icon: '💾', label: 'Backup',        color: '#E8F5E9', tab: 'Backup' },
+  { icon: '🗂️', label: 'Documentos',   color: '#E3F2FD', tab: 'Documentos' },
 ];
 
 export default function HomeScreen() {
