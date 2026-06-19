@@ -236,11 +236,7 @@ export default function DocumentosScreen() {
 
         {/* Filtro de semanas */}
         {semanasDisponibles.length > 0 && (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.semanasScroll}
-          >
+          <View style={styles.semanasWrap}>
             <TouchableOpacity
               style={[styles.semanaChip, semanaActiva === null && styles.semanaChipActivo]}
               onPress={() => setSemanaActiva(null)}
@@ -258,11 +254,11 @@ export default function DocumentosScreen() {
                 activeOpacity={0.7}
               >
                 <Text style={[styles.semanaChipText, semanaActiva === s && styles.semanaChipTextActivo]}>
-                  Sem. {s}
+                  S{s}
                 </Text>
               </TouchableOpacity>
             ))}
-          </ScrollView>
+          </View>
         )}
 
         {/* Lista de documentos */}
@@ -508,9 +504,11 @@ const styles = StyleSheet.create({
   semanaValSub: { fontSize: 11, color: '#bbb', marginTop: -2 },
 
   // Semanas
-  semanasScroll: { gap: 8, paddingBottom: 12, paddingRight: 4 },
+  semanasWrap: {
+    flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12,
+  },
   semanaChip: {
-    borderRadius: 16, paddingHorizontal: 14, paddingVertical: 6,
+    borderRadius: 12, paddingHorizontal: 10, paddingVertical: 5,
     backgroundColor: '#F7F7F7', borderWidth: 1.5, borderColor: '#eee',
   },
   semanaChipActivo: { backgroundColor: '#FCE4EC', borderColor: '#C2185B' },
